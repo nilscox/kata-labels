@@ -11,6 +11,7 @@ type LabelsListProps = {
 };
 
 const LabelsList: React.FC<LabelsListProps> = ({ labels, allLabels, addLabel, removeLabel }) => {
+  const [editing, setEditing] = useState(false);
   const [text, setText] = useState('');
 
   const toggle = (label: LabelType) => {
@@ -24,17 +25,27 @@ const LabelsList: React.FC<LabelsListProps> = ({ labels, allLabels, addLabel, re
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Backspace' && text === '' && labels.length > 0) {
-      removeLabel(labels[labels.length - 1]);
-    }
+    switch (e.key) {
+      case 'Escape':
+        setEditing(false);
+        break;
 
-    if (e.key === 'Enter' && text !== '') {
-      const match = allLabels.find((label) => label.text.startsWith(text));
+      case 'Backspace':
+        if (text === '' && labels.length > 0) {
+          removeLabel(labels[labels.length - 1]);
+        }
 
-      if (match) {
-        toggle(match);
-        setText('');
-      }
+        break;
+
+      case 'Enter':
+        if (text !== '') {
+          const match = allLabels.find((label) => label.text.startsWith(text));
+
+          if (match) {
+            toggle(match);
+            setText('');
+          }
+        }
     }
   };
 
@@ -43,13 +54,18 @@ const LabelsList: React.FC<LabelsListProps> = ({ labels, allLabels, addLabel, re
       {labels.map((label, n) => (
         <Label key={n} label={label} onClick={() => removeLabel(label)} />
       ))}
-      <input
-        value={text}
-        placeholder="text"
-        className="add-label"
-        onChange={(e) => setText(e.currentTarget.value)}
-        onKeyDown={handleKeyDown}
-      />
+      {!editing && <Label label={{ text: '+', color: '#DDD' }} onClick={() => setEditing(true)} />}
+      {editing && (
+        <input
+          autoFocus
+          value={text}
+          placeholder="text"
+          className="add-label"
+          onChange={(e) => setText(e.currentTarget.value)}
+          onBlur={() => setEditing(false)}
+          onKeyDown={handleKeyDown}
+        />
+      )}
     </div>
   );
 };
