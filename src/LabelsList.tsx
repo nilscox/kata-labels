@@ -15,7 +15,7 @@ const LabelsList: React.FC<LabelsListProps> = ({ labels, allLabels, addLabel, re
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && text !== '') {
-      const match = allLabels.find((label) => label.text === text);
+      const match = allLabels.find((label) => label.text.startsWith(text));
 
       if (match) {
         addLabel(match);
