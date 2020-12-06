@@ -8,7 +8,11 @@ export type LabelProps = {
 };
 
 export const Label: React.FC<LabelProps> = ({ label, onClick }) => (
-  <span className={`label ${onClick && 'clickable'}`} style={{ background: label.color }} onClick={onClick}>
+  <span
+    className={`label ${label.textColor} ${onClick && 'clickable'}`}
+    style={{ background: label.color }}
+    onClick={onClick}
+  >
     {label.text}
   </span>
 );

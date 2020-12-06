@@ -8,9 +8,16 @@ type LabelsListProps = {
   allLabels: LabelType[];
   addLabel: (label: LabelType) => void;
   removeLabel: (label: LabelType) => void;
+  setLabelTextColor: (label: LabelType, textColor: 'dark' | 'light') => void;
 };
 
-const LabelsList: React.FC<LabelsListProps> = ({ labels, allLabels, addLabel, removeLabel }) => {
+const LabelsList: React.FC<LabelsListProps> = ({
+  labels,
+  allLabels,
+  addLabel,
+  removeLabel,
+  setLabelTextColor,
+}) => {
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState('');
 
@@ -52,9 +59,15 @@ const LabelsList: React.FC<LabelsListProps> = ({ labels, allLabels, addLabel, re
   return (
     <div className="labels-list">
       {labels.map((label, n) => (
-        <Label key={n} label={label} onClick={() => removeLabel(label)} />
+        <Label
+          key={n}
+          label={label}
+          onClick={() => setLabelTextColor(label, label.textColor === 'dark' ? 'light' : 'dark')}
+        />
       ))}
-      {!editing && <Label label={{ text: '+', color: '#DDD' }} onClick={() => setEditing(true)} />}
+      {!editing && (
+        <Label label={{ text: '+', color: '#DDD', textColor: 'dark' }} onClick={() => setEditing(true)} />
+      )}
       {editing && (
         <input
           autoFocus
