@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import Autocomplete from './Autocomplete';
 import Label from './Label';
 import { LabelType } from './LabelType';
 
@@ -20,6 +21,7 @@ const LabelsList: React.FC<LabelsListProps> = ({
 }) => {
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState('');
+  const [autocompleted, setAutocompleted] = useState('');
 
   const toggle = (label: LabelType) => {
     const existing = labels.find(({ text }) => text === label.text);
@@ -45,14 +47,16 @@ const LabelsList: React.FC<LabelsListProps> = ({
         break;
 
       case 'Enter':
-        if (text !== '') {
-          const match = allLabels.find((label) => label.text.startsWith(text));
+        if (autocompleted !== '') {
+          const match = allLabels.find((label) => label.text === autocompleted);
 
           if (match) {
             toggle(match);
             setText('');
           }
         }
+
+        break;
     }
   };
 
@@ -69,12 +73,14 @@ const LabelsList: React.FC<LabelsListProps> = ({
         <Label label={{ text: '+', color: '#DDD', textColor: 'dark' }} onClick={() => setEditing(true)} />
       )}
       {editing && (
-        <input
+        <Autocomplete
           autoFocus
+          options={allLabels.map(({ text }) => text)}
           value={text}
           placeholder="text"
           className="add-label"
           onChange={(e) => setText(e.currentTarget.value)}
+          onAutocomplete={setAutocompleted}
           onBlur={() => setEditing(false)}
           onKeyDown={handleKeyDown}
         />
