@@ -20,3 +20,12 @@ html {
   max-width: 80%;
   margin: auto;
 }
+
+.label {
+  padding: 2px 8px;
+  margin: 0 4px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #222;
+  box-shadow: 1px 1px 3px -1px rgba(0, 0, 0, 0.5);
+}
