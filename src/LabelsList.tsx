@@ -5,19 +5,22 @@ import { LabelType } from './LabelType';
 
 type LabelsListProps = {
   labels: LabelType[];
-  addLabel: (text: string, color: string) => void;
+  allLabels: LabelType[];
+  addLabel: (label: LabelType) => void;
   removeLabel: (label: LabelType) => void;
 };
 
-const LabelsList: React.FC<LabelsListProps> = ({ labels, addLabel, removeLabel }) => {
+const LabelsList: React.FC<LabelsListProps> = ({ labels, allLabels, addLabel, removeLabel }) => {
   const [text, setText] = useState('');
-  const [color, setColor] = useState('');
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && text !== '' && color.match(/^#[0-9a-fA-F]{6}$/)) {
-      addLabel(text, color);
-      setText('');
-      setColor('');
+    if (e.key === 'Enter' && text !== '') {
+      const match = allLabels.find((label) => label.text === text);
+
+      if (match) {
+        addLabel(match);
+        setText('');
+      }
     }
   };
 
@@ -31,13 +34,6 @@ const LabelsList: React.FC<LabelsListProps> = ({ labels, addLabel, removeLabel }
         placeholder="text"
         className="add-label"
         onChange={(e) => setText(e.currentTarget.value)}
-        onKeyDown={handleKeyDown}
-      />
-      <input
-        value={color}
-        placeholder="color"
-        className="add-label"
-        onChange={(e) => setColor(e.currentTarget.value)}
         onKeyDown={handleKeyDown}
       />
     </div>
