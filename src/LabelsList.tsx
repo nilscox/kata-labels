@@ -14,6 +14,10 @@ const LabelsList: React.FC<LabelsListProps> = ({ labels, allLabels, addLabel, re
   const [text, setText] = useState('');
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Backspace' && text === '' && labels.length > 0) {
+      removeLabel(labels[labels.length - 1]);
+    }
+
     if (e.key === 'Enter' && text !== '') {
       const match = allLabels.find((label) => label.text.startsWith(text));
 
