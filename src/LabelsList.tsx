@@ -13,6 +13,16 @@ type LabelsListProps = {
 const LabelsList: React.FC<LabelsListProps> = ({ labels, allLabels, addLabel, removeLabel }) => {
   const [text, setText] = useState('');
 
+  const toggle = (label: LabelType) => {
+    const existing = labels.find(({ text }) => text === label.text);
+
+    if (existing) {
+      removeLabel(existing);
+    } else {
+      addLabel(label);
+    }
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Backspace' && text === '' && labels.length > 0) {
       removeLabel(labels[labels.length - 1]);
@@ -22,7 +32,7 @@ const LabelsList: React.FC<LabelsListProps> = ({ labels, allLabels, addLabel, re
       const match = allLabels.find((label) => label.text.startsWith(text));
 
       if (match) {
-        addLabel(match);
+        toggle(match);
         setText('');
       }
     }
